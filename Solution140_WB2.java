@@ -6,7 +6,7 @@ import java.util.*;
 public class Solution140_WB2 {
 
 
-    String s;
+    /*String s;
     Map<Integer, List<Integer>> startsFor;
     List<String> rs;
 
@@ -45,15 +45,59 @@ public class Solution140_WB2 {
         recurse(s.length(), "");
         return rs;
     }
+    */
+
+    Set<String> dict, fails;
+    List<String> rs;
+
+    boolean bt(String cur, String pre) {
+
+        if(fails.contains(cur)) return false;
+
+        if(cur.isEmpty()) {
+            rs.add(pre.trim()); return true;
+        }
+
+        Set<String> matches = new HashSet<>();
+
+        for(String s: dict) {
+            if(cur.startsWith(s)) matches.add(s);
+        }
+
+        if(matches.isEmpty()) {
+            fails.add(cur); return false;
+        }
+
+        boolean suc = false;
+        for(String s: matches) {
+            suc = bt(cur.substring(s.length()), pre+cur.substring(0, s.length())+" ");
+        }
+
+        if(suc) return true;
+        fails.add(cur);
+        return false;
+    }
+
+    public List<String> wordBreak(String s, Set<String> wordDict) {
+        rs = new ArrayList<>();
+        dict = wordDict;
+        if(dict.size()<1 && s.length()>0) return rs;
+
+        fails = new HashSet<>();
+        bt(s, "");
+
+        return rs;
+
+    }
 
     public static void main(String[] argv) {
-        String s = "catsanddog";
+        String s = "aaaaaaaa";
         HashSet<String> set = new HashSet<>();
-        set. add("cat");
-        set.add("cats");
-        set.add("and");
-        set.add("sand");
-        set.add("dog");
+        set. add("aaa");
+        set.add("aaaa");
+        set.add("aa");
+        //set.add("sand");
+        //set.add("dog");
         new Solution140_WB2().wordBreak(s, set);
     }
 }
